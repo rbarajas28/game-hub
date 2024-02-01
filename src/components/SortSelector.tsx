@@ -1,13 +1,9 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { BsChevronBarDown, BsChevronDown } from "react-icons/bs";
 import usePlatforms, { Platform } from "../hooks/usePlatforms";
+import useGameQueryStore from "../store";
 
-interface Props {
-  sortOrder: string;
-  onSelectSort: (sort: string) => void;
-}
-
-const SortSelector = ({ sortOrder, onSelectSort }: Props) => {
+const SortSelector = () => {
   const sortOrders = [
     { value: "", label: "Relevance" },
     { value: "-added", label: "Date Added" },
@@ -17,9 +13,12 @@ const SortSelector = ({ sortOrder, onSelectSort }: Props) => {
     { value: "-rating", label: "Average rating" },
   ];
 
+  const sortOrder = useGameQueryStore((s) => s.gameQuery.sortOrder);
   const currentSortOrder = sortOrders.find(
     (order) => order.value === sortOrder
   );
+
+  const onSortOrder = useGameQueryStore((s) => s.setOrder);
 
   return (
     <Menu>
@@ -29,7 +28,7 @@ const SortSelector = ({ sortOrder, onSelectSort }: Props) => {
       <MenuList>
         {sortOrders.map((order) => (
           <MenuItem
-            onClick={() => onSelectSort(order.value)}
+            onClick={() => onSortOrder(order.value)}
             key={order.value}
             value={order.value}
           >
